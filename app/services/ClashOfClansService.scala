@@ -79,7 +79,54 @@ object ClashOfClansService {
     level: Int,
     maxLevel: Int,
     village: String,
-  )
+  ) {
+    val offensiveWeight: Int = name match {
+      case "Barbarian King" => level * 20
+      case "Archer Queen" => level * 30
+      case "Grand Warden" => level * 40
+
+      case "Lightning Spell" => level * 200
+      case "Healing Spell" => level * 210
+      case "Rage Spell" => level * 220
+      case "Jump Spell" => level * 230
+      case "Freeze Spell" => level * 240
+      case "Clone Spell" => level * 250
+      case "Poison Spell" => level * 125
+      case "Earthquake Spell" => level * 100
+      case "Haste Spell" => level * 150
+      case "Skeleton Spell" => level * 175
+      case "Bat Spell" => level * 200
+
+      case "Barbarian" => level * 50
+      case "Archer" => level * 75
+      case "Goblin" => level * 100
+      case "Giant" => level * 125
+      case "Wall Breaker" => level * 140
+      case "Balloon" => level * 120
+      case "Wizard" => level * 105
+      case "Healer" => level * 140
+      case "Dragon" => level * 150
+      case "P.E.K.K.A" => level * 150
+      case "Baby Dragon" => level * 155
+      case "Miner" => level * 160
+      case "Electro Dragon" => level * 165
+
+      case "Minion" => level * 120
+      case "Hog Rider" => level * 150
+      case "Valkyrie" => level * 170
+      case "Golem" => level * 333
+      case "Witch" => level * 800
+      case "Lava Hound" => level * 625
+      case "Bowler" => level * 1600
+      case "Ice Golem" => level * 1600
+
+      case "Wall Wrecker" => level * 300
+      case "Battle Blimp" => level * 300
+      case "Stone Slammer" => level * 300
+
+      case _ if village != "home" => 0
+    }
+  }
   implicit val formatTroopHeroSpell: Format[TroopHeroSpell] = Json.format[TroopHeroSpell]
 
   case class Player(
@@ -106,7 +153,9 @@ object ClashOfClansService {
     troops: Seq[TroopHeroSpell],
     heroes: Seq[TroopHeroSpell],
     spells: Seq[TroopHeroSpell],
-  )
+  ) {
+    val offensiveWeight = troops.map(_.offensiveWeight).sum + heroes.map(_.offensiveWeight).sum + spells.map(_.offensiveWeight).sum
+  }
   implicit val formatPlayer: Format[Player] = Json.format[Player]
 
   case class ClanPlayer(

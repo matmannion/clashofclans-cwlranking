@@ -26,6 +26,8 @@ object HomeController {
   ) {
     // Use position, not mapPosition (just trying to match fly)
     val clashCaller: Double = 1.25 * (2 - defender.position.toDouble / 15) * gainedStars + (1.0 / 36) * gainedStars
+
+    val netOffensiveWeight: Int = attacker.player.offensiveWeight - defender.player.offensiveWeight
   }
   implicit val writesRichClanWarAttack: Writes[RichClanWarAttack] = Json.writes[RichClanWarAttack]
 
@@ -121,6 +123,8 @@ object HomeController {
     stars: Int,
     gainedStars: Int,
     clashCaller: Double,
+    defenderOffensiveWeight: Double,
+    netOffensiveWeight: Double,
     destruction: Int,
   )
   implicit val writesPlayerStatsAttack: Writes[PlayerStatsAttack] = Json.writes[PlayerStatsAttack]
@@ -132,6 +136,8 @@ object HomeController {
     netStars: Int,
     clashCaller: Double,
     netClashCaller: Double,
+    defenderOffensiveWeight: Double,
+    netOffensiveWeight: Double,
     destruction: Int,
     attacks: Seq[PlayerStatsAttack],
     defences: Seq[PlayerStatsAttack],
@@ -193,6 +199,8 @@ class HomeController @Inject()(
                 netStars = attacks.map(_.gainedStars).sum - defences.map(_.stars).sum,
                 clashCaller = attacks.map(_.clashCaller).sum,
                 netClashCaller = attacks.map(_.clashCaller).sum - defences.map(_.clashCaller).sum,
+                defenderOffensiveWeight = attacks.map { a => a.defender.player.offensiveWeight * (a.gainedStars.toDouble / 3) }.sum,
+                netOffensiveWeight = attacks.map { a => a.netOffensiveWeight * (a.gainedStars.toDouble / 3) }.sum,
                 destruction = attacks.map(_.destruction).sum,
                 attacks = attacks.map { attack =>
                   PlayerStatsAttack(
@@ -201,6 +209,8 @@ class HomeController @Inject()(
                     stars = attack.stars,
                     gainedStars = attack.gainedStars,
                     clashCaller = attack.clashCaller,
+                    defenderOffensiveWeight = attack.defender.player.offensiveWeight * (attack.gainedStars.toDouble / 3),
+                    netOffensiveWeight = attack.netOffensiveWeight * (attack.gainedStars.toDouble / 3),
                     destruction = attack.destruction,
                   )
                 },
@@ -211,6 +221,8 @@ class HomeController @Inject()(
                     stars = attack.stars,
                     gainedStars = attack.gainedStars,
                     clashCaller = attack.clashCaller,
+                    defenderOffensiveWeight = attack.defender.player.offensiveWeight * (attack.gainedStars.toDouble / 3),
+                    netOffensiveWeight = attack.netOffensiveWeight * (attack.gainedStars.toDouble / 3),
                     destruction = attack.destruction,
                   )
                 }

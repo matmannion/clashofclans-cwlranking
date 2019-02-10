@@ -13,6 +13,7 @@
               <th scope="col">#</th>
               <th scope="col">Name</th>
               <th scope="col">Stars</th>
+              <th scope="col">Destruction</th>
             </tr>
           </thead>
           <tbody>
@@ -21,6 +22,7 @@
               <th scope="row">@{i + 1}</th>
               <td>@player.name</td>
               <td>@player.stars</td>
+              <td>@player.destruction</td>
             </tr>
           }
           </tbody>
@@ -35,20 +37,26 @@
               <th scope="col">#</th>
               <th scope="col">Name</th>
               <th scope="col">Net stars</th>
+              <th scope="col">Attacks</th>
+              <th scope="col">Defences (days)</th>
             </tr>
           </thead>
           <tbody>
-          @stats.sortBy(s => (s.stars, s.destruction)).reverse.zipWithIndex.map { case (player, i) =>
+          @stats.sortBy(s => (s.netStars, s.destruction)).reverse.zipWithIndex.map { case (player, i) =>
             <tr>
               <th scope="row">@{i + 1}</th>
               <td>@player.name</td>
               <td>@player.netStars</td>
+              <td>@player.attacks.size</td>
+              <td>@player.defences.size</td>
             </tr>
           }
           </tbody>
         </table>
       </div>
+    </div>
 
+    <div class="row">
       <div class="col-sm">
         <table class="table table-bordered">
           <caption>Clash caller</caption>
@@ -87,6 +95,52 @@
               <th scope="row">@{i + 1}</th>
               <td>@player.name</td>
               <td>@("%.2f".format(player.netClashCaller))</td>
+            </tr>
+          }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm">
+        <table class="table table-bordered">
+          <caption>Defender offensive weight</caption>
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Defender offensive weight</th>
+            </tr>
+          </thead>
+          <tbody>
+          @stats.sortBy(_.defenderOffensiveWeight).reverse.zipWithIndex.map { case (player, i) =>
+            <tr>
+              <th scope="row">@{i + 1}</th>
+              <td>@player.name</td>
+              <td>@("%.2f".format(player.defenderOffensiveWeight))</td>
+            </tr>
+          }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-sm">
+        <table class="table table-bordered">
+          <caption>Net offensive weight</caption>
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Net offensive weight</th>
+            </tr>
+          </thead>
+          <tbody>
+          @stats.sortBy(_.netOffensiveWeight).reverse.zipWithIndex.map { case (player, i) =>
+            <tr>
+              <th scope="row">@{i + 1}</th>
+              <td>@player.name</td>
+              <td>@("%.2f".format(player.netOffensiveWeight))</td>
             </tr>
           }
           </tbody>
