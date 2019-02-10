@@ -1,0 +1,97 @@
+@import controllers.HomeController._
+
+@(stats: Seq[PlayerStats])
+
+@main("Clan war league stats") {
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <table class="table table-bordered">
+          <caption>Stars</caption>
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Stars</th>
+            </tr>
+          </thead>
+          <tbody>
+          @stats.sortBy(s => (s.stars, s.destruction)).reverse.zipWithIndex.map { case (player, i) =>
+            <tr>
+              <th scope="row">@{i + 1}</th>
+              <td>@player.name</td>
+              <td>@player.stars</td>
+            </tr>
+          }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-sm">
+        <table class="table table-bordered">
+          <caption>Net stars</caption>
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Net stars</th>
+            </tr>
+          </thead>
+          <tbody>
+          @stats.sortBy(s => (s.stars, s.destruction)).reverse.zipWithIndex.map { case (player, i) =>
+            <tr>
+              <th scope="row">@{i + 1}</th>
+              <td>@player.name</td>
+              <td>@player.netStars</td>
+            </tr>
+          }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-sm">
+        <table class="table table-bordered">
+          <caption>Clash caller</caption>
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Clash caller</th>
+            </tr>
+          </thead>
+          <tbody>
+          @stats.sortBy(_.clashCaller).reverse.zipWithIndex.map { case (player, i) =>
+            <tr>
+              <th scope="row">@{i + 1}</th>
+              <td>@player.name</td>
+              <td>@("%.2f".format(player.clashCaller))</td>
+            </tr>
+          }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-sm">
+        <table class="table table-bordered">
+          <caption>Net clash caller</caption>
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Net clash caller</th>
+            </tr>
+          </thead>
+          <tbody>
+          @stats.sortBy(_.netClashCaller).reverse.zipWithIndex.map { case (player, i) =>
+            <tr>
+              <th scope="row">@{i + 1}</th>
+              <td>@player.name</td>
+              <td>@("%.2f".format(player.netClashCaller))</td>
+            </tr>
+          }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+}
